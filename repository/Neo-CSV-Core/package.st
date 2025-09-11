@@ -1,1 +1,1 @@
-Package { #name : #'Neo-CSV-Core' }
+Package { #name : 'Neo-CSV-Core' }

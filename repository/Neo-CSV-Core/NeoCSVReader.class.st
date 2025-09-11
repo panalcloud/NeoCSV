@@ -16,8 +16,8 @@ MIT License.
 
 "
 Class {
-	#name : #NeoCSVReader,
-	#superclass : #Object,
+	#name : 'NeoCSVReader',
+	#superclass : 'Object',
 	#instVars : [
 		'readStream',
 		'charBuffer',
@@ -31,10 +31,11 @@ Class {
 		'emptyFieldInput',
 		'strict'
 	],
-	#category : #'Neo-CSV-Core'
+	#category : 'Neo-CSV-Core',
+	#package : 'Neo-CSV-Core'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 NeoCSVReader class >> on: readStream [
 	"Initialize on readStream, which should be a character stream that 
 	implements #next, #atEnd and (optionally) #close."
@@ -44,7 +45,7 @@ NeoCSVReader class >> on: readStream [
 		yourself
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVReader >> addField [
 	"Add the next indexable field with a pass through converter"
 	
@@ -53,7 +54,7 @@ NeoCSVReader >> addField [
 		addFieldAccessor: [ :string | string ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVReader >> addField: accessor [
 	"Add a field based on a mutator accessor accepting a field 
 	String as argument to be sent to an instance of recordClass.
@@ -65,7 +66,7 @@ NeoCSVReader >> addField: accessor [
 			self applyAccessor: accessor on: object with: string ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVReader >> addField: accessor converter: converter [
 	"Add a field based on a mutator accessor accepting the result of 
 	applying the converter block on the field String read as argument 
@@ -78,7 +79,7 @@ NeoCSVReader >> addField: accessor converter: converter [
 			self applyAccessor: accessor on: object with: (converter value: string) ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 NeoCSVReader >> addFieldAccessor: block [
 	fieldAccessors 
 		ifNil: [
@@ -87,7 +88,7 @@ NeoCSVReader >> addFieldAccessor: block [
 			fieldAccessors := fieldAccessors copyWith: block ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVReader >> addFieldAt: key [
 	"Add a field that will be stored under key in recordClass as String"
 	
@@ -97,7 +98,7 @@ NeoCSVReader >> addFieldAt: key [
 			object at: key put: string ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVReader >> addFieldAt: key converter: converter [
 	"Add a field that will be stored under key in recordClass as the result of 
 	applying the converter block on the field String read as argument"
@@ -108,7 +109,7 @@ NeoCSVReader >> addFieldAt: key converter: converter [
 			object at: key put: (converter value: string) ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVReader >> addFieldConverter: converter [
 	"Add the next indexable field with converter block, 
 	accepting a String and returning a specific object"
@@ -118,7 +119,7 @@ NeoCSVReader >> addFieldConverter: converter [
 		addFieldAccessor: converter
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVReader >> addFields: accessors [
 	"Add fields based on a collection of accessors, not doing any conversions."
 	
@@ -126,7 +127,7 @@ NeoCSVReader >> addFields: accessors [
 		self addField: each ]
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVReader >> addFieldsAt: keys [
 	"Add fields based on a collection of keys for #at:put: not doing any conversions"
 
@@ -134,14 +135,14 @@ NeoCSVReader >> addFieldsAt: keys [
 		self addFieldAt: each ]
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVReader >> addFloatField [
 	"Add a field for indexable records parsed as Float"
 
 	self addFieldConverter: [ :string | NeoNumberParser parse: string ]
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVReader >> addFloatField: accessor [
 	"Add a field with accessor parsed as Float"
 
@@ -150,7 +151,7 @@ NeoCSVReader >> addFloatField: accessor [
 		converter: [ :string | NeoNumberParser parse: string ]
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVReader >> addFloatFieldAt: key [
 	"Add a field for key for #at:put: parsed as Float"
 
@@ -159,14 +160,14 @@ NeoCSVReader >> addFloatFieldAt: key [
 		converter: [ :string | NeoNumberParser parse: string ]
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVReader >> addFloatFieldRadixPointComma [
 	"Add a field for indexable records parsed as Float using a comma as radix point"
 
 	self addFieldConverter: [ :string | (NeoNumberParser on: string) radixPoint: $, ; next ]
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVReader >> addFloatFieldRadixPointComma: accessor [
 	"Add a field for indexable records parsed as Float using a comma as radix point"
 
@@ -175,7 +176,7 @@ NeoCSVReader >> addFloatFieldRadixPointComma: accessor [
 		converter: [ :string | (NeoNumberParser on: string) radixPoint: $, ; next ]
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVReader >> addFloatFieldRadixPointCommaAt: key [
 	"Add a field for key for #at:put: parsed as Float using a comma as radix point"
 
@@ -184,28 +185,35 @@ NeoCSVReader >> addFloatFieldRadixPointCommaAt: key [
 		converter: [ :string | (NeoNumberParser on: string) radixPoint: $, ; next ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'convenience' }
+NeoCSVReader >> addFloatFields: count [
+	"Add a count of consecutive float fields"
+
+	count timesRepeat: [ self addFloatField ]
+]
+
+{ #category : 'initialize-release' }
 NeoCSVReader >> addIgnoredField [
 	"Add a field that should be ignored, should not become part of the record"
 
 	self addFieldAccessor: nil
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVReader >> addIgnoredFields: count [
-	"Add a count of consecutive ignored fields to receiver."
+	"Add a count of consecutive ignored fields"
 
 	count timesRepeat: [ self addIgnoredField ]
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVReader >> addIntegerField [
 	"Add a field for indexable records parsed as Integer"
 
 	self addFieldConverter: [ :string | NeoNumberParser parse: string ]
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVReader >> addIntegerField: accessor [
 	"Add a field with accessor parsed as Integer"
 
@@ -214,7 +222,7 @@ NeoCSVReader >> addIntegerField: accessor [
 		converter: [ :string | NeoNumberParser parse: string ]
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVReader >> addIntegerFieldAt: key [
 	"Add a field for key for #at:put: parsed as Integer"
 
@@ -223,14 +231,35 @@ NeoCSVReader >> addIntegerFieldAt: key [
 		converter: [ :string | NeoNumberParser parse: string ]
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
+NeoCSVReader >> addIntegerFields: count [
+	"Add a count of consecutive integer fields"
+
+	count timesRepeat: [ self addIntegerField ]
+]
+
+{ #category : 'convenience' }
+NeoCSVReader >> addPlainField [
+	"Add a plain, pass through, string field"
+
+	self addField
+]
+
+{ #category : 'convenience' }
+NeoCSVReader >> addPlainFields: count [
+	"Add a count of consecutive plain, pass through, string fields"
+
+	count timesRepeat: [ self addPlainField ]
+]
+
+{ #category : 'convenience' }
 NeoCSVReader >> addSymbolField [
 	"Add a field for indexable records read as Symbol"
 
 	self addFieldConverter: [ :string | string asSymbol ]
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVReader >> addSymbolField: accessor [
 	"Add a field with accessor read as Symbol"
 
@@ -239,7 +268,7 @@ NeoCSVReader >> addSymbolField: accessor [
 		converter: [ :string | string asSymbol ]
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVReader >> addSymbolFieldAt: key [
 	"Add a field for key for #at:put: read as Symbol"
 
@@ -248,7 +277,14 @@ NeoCSVReader >> addSymbolFieldAt: key [
 		converter: [ :string | string asSymbol ]
 ]
 
-{ #category : #private }
+{ #category : 'convenience' }
+NeoCSVReader >> addSymbolFields: count [
+	"Add a count of consecutive symbol fields"
+
+	count timesRepeat: [ self addSymbolField ]
+]
+
+{ #category : 'private' }
 NeoCSVReader >> applyAccessor: accessor on: object with: value [
 	"Use accessor to assign value on a property of object.
 	Accessor can be a block or mutator symbol."
@@ -260,26 +296,26 @@ NeoCSVReader >> applyAccessor: accessor on: object with: value [
 		ifFalse: [ object perform: accessor with: value ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReader >> atEnd [
 	^ charBuffer == nil and: [ readStream atEnd ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVReader >> beStrict [
 	"Configure me to signal errors when the input does not match my field configration"
 	
 	strict := true
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVReader >> close [
 	readStream ifNotNil: [
 		readStream close.
 		readStream := charBuffer := nil ]
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 NeoCSVReader >> collect: block [
 	"Execute block for each record until I am at end, returning the results in an Array"
 	
@@ -289,7 +325,7 @@ NeoCSVReader >> collect: block [
 					out nextPut: (block value: self next) ] ]
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 NeoCSVReader >> do: block [
 	"Execute block for each record until I am at end."
 	
@@ -298,7 +334,7 @@ NeoCSVReader >> do: block [
 			block value: self next ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVReader >> emptyFieldInput: block [
 	"Set an optional block to test for field input values that should be considered empty.
 	The default is nil, equivalent to [ :field | field isEmpty ]."
@@ -306,7 +342,7 @@ NeoCSVReader >> emptyFieldInput: block [
 	emptyFieldInput := block
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVReader >> emptyFieldValue: object [
 	"Set the value to be used when reading empty or missing fields.
 	The default is nil. Empty or missing fields are never set 
@@ -318,7 +354,7 @@ NeoCSVReader >> emptyFieldValue: object [
 	emptyFieldValue := object
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVReader >> fieldCount: count [
 	"Set the field count up front.
 	This will be used when reading records as Arrays.
@@ -328,7 +364,7 @@ NeoCSVReader >> fieldCount: count [
 	fieldCount := count
 ]
 
-{ #category : #'private - reading' }
+{ #category : 'private - reading' }
 NeoCSVReader >> handleEndOfRecord [
 	strict
 		ifTrue: [ 
@@ -337,7 +373,7 @@ NeoCSVReader >> handleEndOfRecord [
 		ifFalse: [ self skipLine ]
 ]
 
-{ #category : #'private - reading' }
+{ #category : 'private - reading' }
 NeoCSVReader >> handleSeparator [
 	self readSeparator 
 		ifFalse: [ 
@@ -345,7 +381,7 @@ NeoCSVReader >> handleSeparator [
 				ifTrue: [ self error: 'Insufficient fields for CSV input' ] ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVReader >> initialize [
 	super initialize.
 	recordClass := Array.
@@ -354,7 +390,7 @@ NeoCSVReader >> initialize [
 	strict := false
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVReader >> namedColumnsConfiguration [
 	"Assuming there is a header row that has not yet been read,
 	configure the receiver to read each row as a Dictionary where
@@ -368,7 +404,7 @@ NeoCSVReader >> namedColumnsConfiguration [
 	^ header
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 NeoCSVReader >> next [
 	"Read the next record.
 	I will return an instance of recordClass."
@@ -378,7 +414,7 @@ NeoCSVReader >> next [
 		ifFalse: [ self readNextRecordAsObject ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 NeoCSVReader >> nextChar [
 	^ charBuffer 
 		ifNil: [ 
@@ -389,7 +425,7 @@ NeoCSVReader >> nextChar [
 			^ char ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVReader >> on: aReadStream [
 	"Initialize on aReadStream, which should be a character stream that 
 	implements #next, #atEnd and (optionally) #close."
@@ -397,21 +433,21 @@ NeoCSVReader >> on: aReadStream [
 	readStream := aReadStream
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 NeoCSVReader >> peekChar [
 	^ charBuffer 
 		ifNil: [ 
 			charBuffer := readStream next ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 NeoCSVReader >> peekEndOfLine [
 	| char |
 	char := self peekChar codePoint.
 	^ (char == 10 "Character lf" ) or: [ char == 13 "Character cr" ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 NeoCSVReader >> peekFor: character [
 	self peekChar == character
 		ifTrue: [ 
@@ -420,23 +456,23 @@ NeoCSVReader >> peekFor: character [
 	^ false
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 NeoCSVReader >> peekQuote [
 	^ self peekChar == $"
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 NeoCSVReader >> peekSeparator [
 	^ self peekChar == separator
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 NeoCSVReader >> readAtEndOrEndOfLine [
 	^ self atEnd or: [ self readEndOfLine ]
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 NeoCSVReader >> readEndOfLine [
 	| char |
 	char := self peekChar codePoint.
@@ -455,14 +491,14 @@ NeoCSVReader >> readEndOfLine [
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 NeoCSVReader >> readEndOfQuotedField [	
 	"A double quote inside a quoted field is an embedded quote (escaped)"
 	
 	^ self readQuote and: [ self peekQuote not ]
 ]
 
-{ #category : #'private - reading' }
+{ #category : 'private - reading' }
 NeoCSVReader >> readField [
 	| field |
 	field := self peekQuote
@@ -474,7 +510,7 @@ NeoCSVReader >> readField [
 	^ field
 ]
 
-{ #category : #'private - reading' }
+{ #category : 'private - reading' }
 NeoCSVReader >> readFirstRecord [ 
 	"This is only used for array based records when there are no field accessors or 
 	when there is no field count, to obtain a field count based on the first record"
@@ -487,7 +523,7 @@ NeoCSVReader >> readFirstRecord [
 					ifTrue: [ stream nextPut: emptyFieldValue ] ] ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 NeoCSVReader >> readHeader [
 	"Read a record, presumably a header and return the header field names.
 	This should normally be called only at the beginning and only once.
@@ -504,7 +540,7 @@ NeoCSVReader >> readHeader [
 	^ names
 ]
 
-{ #category : #'private - reading' }
+{ #category : 'private - reading' }
 NeoCSVReader >> readNextRecord [
 	| record |
 	record := self recordClassNew: fieldCount.
@@ -515,7 +551,7 @@ NeoCSVReader >> readNextRecord [
 	^ record
 ]
 
-{ #category : #'private - reading' }
+{ #category : 'private - reading' }
 NeoCSVReader >> readNextRecordAsArray [
 	fieldAccessors ifNotNil: [ 
 		self fieldCount: (fieldAccessors count: [ :each | each notNil ]) ].
@@ -528,7 +564,7 @@ NeoCSVReader >> readNextRecordAsArray [
 			self readNextRecord ]
 ]
 
-{ #category : #'private - reading' }
+{ #category : 'private - reading' }
 NeoCSVReader >> readNextRecordAsObject [
 	| object |
 	object := self recordClassNew.
@@ -548,7 +584,7 @@ NeoCSVReader >> readNextRecordAsObject [
 	^ object
 ]
 
-{ #category : #'private - reading' }
+{ #category : 'private - reading' }
 NeoCSVReader >> readNextRecordWithFieldAccessors: record [
 	| fieldIndex |
 	fieldIndex := 1.
@@ -568,19 +604,19 @@ NeoCSVReader >> readNextRecordWithFieldAccessors: record [
 		separatedBy: [ self handleSeparator ]
 ]
 
-{ #category : #'private - reading' }
+{ #category : 'private - reading' }
 NeoCSVReader >> readNextRecordWithoutFieldAccessors: record [
 	1 to: fieldCount do: [ :each |
 		record at: each put: self readField.
 		each = fieldCount ifFalse: [ self handleSeparator ] ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 NeoCSVReader >> readQuote [
 	^ self peekFor: $"
 ]
 
-{ #category : #'private - reading' }
+{ #category : 'private - reading' }
 NeoCSVReader >> readQuotedField [
 	| field |
 	self readQuote.
@@ -593,12 +629,12 @@ NeoCSVReader >> readQuotedField [
 		ifFalse: [ field ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 NeoCSVReader >> readSeparator [
 	^ self peekFor: separator
 ]
 
-{ #category : #'private - reading' }
+{ #category : 'private - reading' }
 NeoCSVReader >> readUnquotedField [
 	(self atEnd or: [ self peekSeparator or: [ self peekEndOfLine ] ])
 		ifTrue: [ ^ emptyFieldValue ].
@@ -608,7 +644,7 @@ NeoCSVReader >> readUnquotedField [
 				stream nextPut: self nextChar ] ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVReader >> recordClass: anObject [
 	"Set the object class to instanciate while reading records.
 	Unless the objets are integer indexable, you have to specify fields as well."
@@ -616,7 +652,7 @@ NeoCSVReader >> recordClass: anObject [
 	recordClass := anObject
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVReader >> recordClassIsIndexable: boolean [
 	"Set whether recordClass should be treated as an indexable sequenceable collection
 	class that implements #new: and #streamContents and whose instances implement #at:put: 
@@ -626,22 +662,22 @@ NeoCSVReader >> recordClassIsIndexable: boolean [
 	recordClassIsIndexable := boolean 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 NeoCSVReader >> recordClassNew [
 	^ recordClass new
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 NeoCSVReader >> recordClassNew: size [
 	^ recordClass new: size
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 NeoCSVReader >> recordClassStreamContents: block [
 	^ recordClass streamContents: block
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 NeoCSVReader >> reject: filter [
 	"Read and collect records that do not satisfy filter into an Array until there are none left.
 	Return the array."
@@ -652,7 +688,7 @@ NeoCSVReader >> reject: filter [
 			thenDo: [ :each | stream nextPut: each ] ]
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 NeoCSVReader >> reject: filter thenDo: block [
 	"Execute block for each record that does not satisfy filter until I am at end."
 
@@ -661,13 +697,13 @@ NeoCSVReader >> reject: filter thenDo: block [
 			ifFalse: [ block value: record ] ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVReader >> resetStream [
 	charBuffer := nil.
 	readStream reset
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 NeoCSVReader >> select: filter [
 	"Read and collect records that satisfy filter into an Array until there are none left.
 	Return the array."
@@ -678,7 +714,7 @@ NeoCSVReader >> select: filter [
 			thenDo: [ :each | stream nextPut: each ] ]
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 NeoCSVReader >> select: filter thenDo: block [
 	"Execute block for each record that satisfies filter until I am at end."
 
@@ -687,7 +723,7 @@ NeoCSVReader >> select: filter thenDo: block [
 			ifTrue: [ block value: record ] ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVReader >> separator: character [
 	"Set the field separator character to use, defaults to comma"
 	
@@ -695,19 +731,19 @@ NeoCSVReader >> separator: character [
 	separator := character 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 NeoCSVReader >> skip [
 	self skipRecord
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVReader >> skip: count [
 	"Skip count records by reading until end of line."
 
 	count timesRepeat: [ self skip ]
 ]
 
-{ #category : #'private - reading' }
+{ #category : 'private - reading' }
 NeoCSVReader >> skipField [
 	self peekQuote
 		ifTrue: [
@@ -719,7 +755,7 @@ NeoCSVReader >> skipField [
 				whileFalse: [ self nextChar ] ]
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVReader >> skipHeader [
 	"Read a record, presumably a header, with the intention of skipping it.
 	This should normally be called only at the beginning and only once.
@@ -728,7 +764,7 @@ NeoCSVReader >> skipHeader [
 	self readHeader
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 NeoCSVReader >> skipLine [
 	"Skip one (the current) record by reading until end of line.
 	This is fast and has no side effects but does not honor quoted newlines."
@@ -736,7 +772,7 @@ NeoCSVReader >> skipLine [
 	[ self readAtEndOrEndOfLine ] whileFalse: [ self nextChar ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 NeoCSVReader >> skipRecord [
 	"Skip one (the current) record by reading fields until end of line.
 	This is fast, has no side effects and honors quoted newlines."
@@ -747,7 +783,7 @@ NeoCSVReader >> skipRecord [
 			self readSeparator ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 NeoCSVReader >> stringStreamContents: block [
 	"Like String streamContents: block
 	but reusing the underlying buffer for improved efficiency"
@@ -760,7 +796,7 @@ NeoCSVReader >> stringStreamContents: block [
 	^ stringStream contents
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 NeoCSVReader >> upToEnd [ 
 	"Read and collect records into an Array until there are none left.
 	Return the array."

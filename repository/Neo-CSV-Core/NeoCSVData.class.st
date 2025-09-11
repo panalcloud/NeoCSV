@@ -17,27 +17,28 @@ Using NeoCSVReader and NeoCSVWriter directly gives you much more options.
 I can also be used by construction from a collection (NeoCSVData class>>with:) with the header being set manually.
 "
 Class {
-	#name : #NeoCSVData,
-	#superclass : #Object,
+	#name : 'NeoCSVData',
+	#superclass : 'Object',
 	#instVars : [
 		'header',
 		'data',
 		'types'
 	],
-	#category : #'Neo-CSV-Core'
+	#category : 'Neo-CSV-Core',
+	#package : 'Neo-CSV-Core'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 NeoCSVData class >> readAsDictionariesFrom: characterReadStream [
 	^ self new readAsDictionariesFrom: characterReadStream; yourself
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 NeoCSVData class >> readFrom: characterReadStream [
 	^ self new readFrom: characterReadStream; yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 NeoCSVData class >> typesMap [
 	^ {
 		#string -> [ :string | string ].
@@ -47,55 +48,55 @@ NeoCSVData class >> typesMap [
 	} asDictionary
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 NeoCSVData class >> with: collectionOfRecords [
 	^ self new 
 		data: collectionOfRecords; 
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 NeoCSVData >> data [
 	^ data
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 NeoCSVData >> data: collectionOfRecords [
 	data := collectionOfRecords
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVData >> hasData [
 	^ data notNil and: [ data size > 0 ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVData >> hasHeader [
 	^ header notNil and: [ header size > 0 ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVData >> hasTypes [
 	^ types notNil and: [ types size > 0 ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 NeoCSVData >> header [
 	^ header
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 NeoCSVData >> header: collectionOfFieldNames [
 	header := collectionOfFieldNames
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 NeoCSVData >> headerForPresentation [
 	^ self header
 		ifNil: [ self data ifNotNil: [ (1 to: self data first size) collect: #asString ] ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 NeoCSVData >> numberOfColumns [
 	^ header
 		ifNil: [ 
@@ -103,12 +104,12 @@ NeoCSVData >> numberOfColumns [
 		ifNotNil: [ header size ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 NeoCSVData >> numberOfRows [
 	^ data ifNil: [ 0 ] ifNotNil: [ data size ]
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 NeoCSVData >> printOn: stream [
 	super printOn: stream.
 	stream 
@@ -129,7 +130,7 @@ NeoCSVData >> printOn: stream [
 		nextPut: $)
 ]
 
-{ #category : #reading }
+{ #category : 'reading' }
 NeoCSVData >> readAsDictionariesFrom: characterReadStream [
 	| reader |
 	reader := NeoCSVReader on: characterReadStream.
@@ -144,7 +145,7 @@ NeoCSVData >> readAsDictionariesFrom: characterReadStream [
 	self data: reader upToEnd
 ]
 
-{ #category : #reading }
+{ #category : 'reading' }
 NeoCSVData >> readFrom: characterReadStream [
 	| reader |
 	reader := NeoCSVReader on: characterReadStream.
@@ -158,30 +159,30 @@ NeoCSVData >> readFrom: characterReadStream [
 	self data: reader upToEnd
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 NeoCSVData >> typeForColumnAt: index [
 	self hasTypes ifFalse: [ ^ #string ].
 	^ self types at: index
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 NeoCSVData >> typeForColumnNamed: columnName [
 	self hasHeader ifFalse: [ ^ #string ].
 	^ self typeForColumnAt: (self header indexOf: columnName)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 NeoCSVData >> types [
 	^ types
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 NeoCSVData >> types: collectionOfTypeSymbols [
 	self assert: (collectionOfTypeSymbols asSet \ self class typesMap keys) isEmpty.
 	types := collectionOfTypeSymbols
 ]
 
-{ #category : #writing }
+{ #category : 'writing' }
 NeoCSVData >> writeOn: characterWriteStream [
 	| writer |
 	self data isEmptyOrNil ifTrue: [ ^ self ].

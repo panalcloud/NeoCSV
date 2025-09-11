@@ -15,8 +15,8 @@ By specifiying fields any object can be written converting and/or quoting each f
 MIT License.
 "
 Class {
-	#name : #NeoCSVWriter,
-	#superclass : #Object,
+	#name : 'NeoCSVWriter',
+	#superclass : 'Object',
 	#instVars : [
 		'writeStream',
 		'separator',
@@ -25,10 +25,11 @@ Class {
 		'fieldAccessors',
 		'emptyFieldValue'
 	],
-	#category : 'Neo-CSV-Core'
+	#category : 'Neo-CSV-Core',
+	#package : 'Neo-CSV-Core'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 NeoCSVWriter class >> on: writeStream [
 	"Initialize on writeStream, which should be a character stream that 
 	implements #nextPut:, #nextPutAll:, #space and (optionally) #close."
@@ -38,7 +39,7 @@ NeoCSVWriter class >> on: writeStream [
 		yourself
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVWriter >> addConstantField: string [
 	"Add a constant field to be written using fieldWriter"
 
@@ -46,7 +47,7 @@ NeoCSVWriter >> addConstantField: string [
 		self writeField: string ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVWriter >> addEmptyField [
 	"Add an empty field to be written using fieldWriter"
 
@@ -54,7 +55,7 @@ NeoCSVWriter >> addEmptyField [
 		self writeField: '' ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVWriter >> addField: accessor [
 	"Add a field based on an accessor to be written using fieldWriter.
 	Accessor can be a Symbol or a Block"
@@ -63,7 +64,7 @@ NeoCSVWriter >> addField: accessor [
 		self writeField: (accessor value: object) ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 NeoCSVWriter >> addFieldAccessor: block [
 	fieldAccessors 
 		ifNil: [
@@ -72,7 +73,7 @@ NeoCSVWriter >> addFieldAccessor: block [
 			fieldAccessors := fieldAccessors copyWith: block ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVWriter >> addFieldAt: key [
 	"Add a field based on a key to be written using fieldWriter"
 
@@ -80,19 +81,19 @@ NeoCSVWriter >> addFieldAt: key [
 		self writeField: (object at: key ifAbsent: [ '' ]) ]
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVWriter >> addFields: accessors [
 	accessors do: [ :each |
 		self addField: each ]
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVWriter >> addFieldsAt: keys [
 	keys do: [ :each |
 		self addFieldAt: each ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVWriter >> addObjectField: accessor [
 	"Add a field based on an accessor to be written as an #object field.
 	Accessor can be a Symbol or a Block"
@@ -101,7 +102,7 @@ NeoCSVWriter >> addObjectField: accessor [
 		self writeObjectField: (accessor value: object) ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVWriter >> addObjectFieldAt: key [
 	"Add a field based on a key to be written as an #object field"
 
@@ -109,19 +110,19 @@ NeoCSVWriter >> addObjectFieldAt: key [
 		self writeObjectField: (object at: key) ]
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVWriter >> addObjectFields: accessors [
 	accessors do: [ :each |
 		self addObjectField: each ]
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVWriter >> addObjectFieldsAt: keys [
 	keys do: [ :each |
 		self addObjectFieldAt: each ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVWriter >> addOptionalQuotedField: accessor [
 	"Add a field based on an accessor to be written as a #optionalQuoted field.
 	Accessor can be a Symbol or a Block"
@@ -130,7 +131,7 @@ NeoCSVWriter >> addOptionalQuotedField: accessor [
 		self writeOptionalQuotedField: (accessor value: object) ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVWriter >> addOptionalQuotedFieldAt: key [
 	"Add a field based on a key to be written as a #optionalQuoted field"
 
@@ -138,19 +139,19 @@ NeoCSVWriter >> addOptionalQuotedFieldAt: key [
 		self writeOptionalQuotedField: (object at: key) ]
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVWriter >> addOptionalQuotedFields: accessors [
 	accessors do: [ :each |
 		self addOptionalQuotedField: each ]
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVWriter >> addOptionalQuotedFieldsAt: keys [
 	keys do: [ :each |
 		self addOptionalQuotedFieldAt: each ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVWriter >> addQuotedField: accessor [
 	"Add a field based on an accessor to be written as a #quoted field.
 	Accessor can be a Symbol or a Block"
@@ -159,7 +160,7 @@ NeoCSVWriter >> addQuotedField: accessor [
 		self writeQuotedField: (accessor value: object) ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVWriter >> addQuotedFieldAt: key [
 	"Add a field based on a key to be written as a #quoted field"
 
@@ -167,19 +168,19 @@ NeoCSVWriter >> addQuotedFieldAt: key [
 		self writeQuotedField: (object at: key) ]
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVWriter >> addQuotedFields: accessors [
 	accessors do: [ :each |
 		self addQuotedField: each ]
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVWriter >> addQuotedFieldsAt: keys [
 	keys do: [ :each |
 		self addQuotedFieldAt: each ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVWriter >> addRawField: accessor [
 	"Add a field based on an accessor to be written as a #raw field.
 	Accessor can be a Symbol or a Block"
@@ -188,7 +189,7 @@ NeoCSVWriter >> addRawField: accessor [
 		self writeRawField: (accessor value: object) ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVWriter >> addRawFieldAt: key [
 	"Add a field based on a key to be written as a #raw field"
 
@@ -196,26 +197,26 @@ NeoCSVWriter >> addRawFieldAt: key [
 		self writeRawField: (object at: key) ]
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVWriter >> addRawFields: accessors [
 	accessors do: [ :each |
 		self addRawField: each ]
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVWriter >> addRawFieldsAt: keys [
 	keys do: [ :each |
 		self addRawFieldAt: each ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVWriter >> close [
 	writeStream ifNotNil: [
 		writeStream close.
 		writeStream := nil ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVWriter >> emptyFieldValue: object [
 	"Set the empty field value to object.
 	When reading fields from records to be written out, 
@@ -225,7 +226,7 @@ NeoCSVWriter >> emptyFieldValue: object [
 	emptyFieldValue := object
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 NeoCSVWriter >> fieldWriter: symbol [
 	"Set the field write to be used, either #quoted (the default), #raw or #object.
 	This determines how field values will be written in the general case.
@@ -239,12 +240,12 @@ NeoCSVWriter >> fieldWriter: symbol [
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 NeoCSVWriter >> flush [
 	writeStream flush
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVWriter >> initialize [ 
 	super initialize.
 	lineEnd := OSPlatform current lineEnding.
@@ -253,7 +254,7 @@ NeoCSVWriter >> initialize [
 
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVWriter >> lineEndConvention: symbol [
 	"Set the end of line convention to be used.
 	Either #cr, #lf or #crlf (the default)."
@@ -262,7 +263,7 @@ NeoCSVWriter >> lineEndConvention: symbol [
 	lineEnd := String perform: symbol
 ]
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 NeoCSVWriter >> namedColumnsConfiguration: columns [
 	"Configure the receiver to output the named columns as keyed properties.
 	The objects to be written should respond to #at: like a Dictionary.
@@ -272,7 +273,7 @@ NeoCSVWriter >> namedColumnsConfiguration: columns [
 	self addFieldsAt: columns
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 NeoCSVWriter >> nextPut: anObject [
 	"Write anObject as single record.
 	Depending on configuration fieldAccessors or a #do: enumeration will be used."
@@ -285,7 +286,7 @@ NeoCSVWriter >> nextPut: anObject [
 	self writeEndOfLine 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 NeoCSVWriter >> nextPutAll: collection [
 	"Write a collection of objects as records"
 	
@@ -293,7 +294,7 @@ NeoCSVWriter >> nextPutAll: collection [
 		self nextPut: each ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVWriter >> on: aWriteStream [
 	"Initialize on aWriteStream, which should be a character stream that 
 	implements #nextPut:, #nextPutAll:, #space and (optionally) #close."
@@ -302,7 +303,7 @@ NeoCSVWriter >> on: aWriteStream [
 
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoCSVWriter >> separator: character [
 	"Set character to be used as separator"
 	
@@ -310,17 +311,17 @@ NeoCSVWriter >> separator: character [
 	separator := character 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 NeoCSVWriter >> writeEndOfLine [
 	writeStream nextPutAll: lineEnd 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 NeoCSVWriter >> writeField: object [
 	self perform: fieldWriter with: object
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 NeoCSVWriter >> writeFieldsUsingAccessors: anObject [
 	| first |
 	first := true.
@@ -329,7 +330,7 @@ NeoCSVWriter >> writeFieldsUsingAccessors: anObject [
 		fieldValue := each value: anObject ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 NeoCSVWriter >> writeFieldsUsingDo: anObject [
 	| first |
 	first := true.
@@ -338,7 +339,7 @@ NeoCSVWriter >> writeFieldsUsingDo: anObject [
 		self writeField: each ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 NeoCSVWriter >> writeHeader: fieldNames [
 	"Write the header, a collection of field names.
 	This should normally be called only at the beginning and only once."
@@ -349,13 +350,13 @@ NeoCSVWriter >> writeHeader: fieldNames [
 	self writeEndOfLine
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 NeoCSVWriter >> writeObjectField: object [
 	object = emptyFieldValue
 		ifFalse: [ object printOn: writeStream ]
 ]
 
-{ #category : #writing }
+{ #category : 'writing' }
 NeoCSVWriter >> writeOptionalQuotedField: object [
 	| string |
 	object = emptyFieldValue
@@ -368,7 +369,7 @@ NeoCSVWriter >> writeOptionalQuotedField: object [
 		ifFalse: [ self writeRawField: object ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 NeoCSVWriter >> writeQuotedField: object [
 	object = emptyFieldValue
 		ifTrue: [ writeStream nextPut: $" ; nextPut: $" ]
@@ -382,13 +383,13 @@ NeoCSVWriter >> writeQuotedField: object [
 			writeStream nextPut: $" ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 NeoCSVWriter >> writeRawField: object [
 	object = emptyFieldValue 
 		ifFalse: [ writeStream nextPutAll: object asString ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 NeoCSVWriter >> writeSeparator [
 	writeStream nextPut: separator 
 ]
